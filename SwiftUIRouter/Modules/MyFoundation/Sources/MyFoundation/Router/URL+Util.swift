@@ -13,7 +13,7 @@ public extension URL {
         if let first = pathComponents.first, first == "/" {
             return pathComponents.dropFirst().joined(separator: "/")
         }
-        return pathComponents.dropFirst().joined(separator: "/")
+        return pathComponents.joined(separator: "/")
     }
     
     var queryAllowedEncoded: URL? {
