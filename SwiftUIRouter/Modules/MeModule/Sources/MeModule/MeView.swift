@@ -11,10 +11,10 @@ import MyFoundation
 public struct MeView: View {
     
     @Environment(\.router) var router
-    
+
     public var body: some View {
-        Button("Button to test") {
-            router.navigate(to: "test", type: .sheet)
+        Button("goto home") {
+            router.switchTab(to: 0)
         }
     }
     

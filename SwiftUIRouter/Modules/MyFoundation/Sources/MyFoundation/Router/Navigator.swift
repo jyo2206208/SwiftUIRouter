@@ -17,7 +17,7 @@ public enum Owner: Int {
 
 @MainActor
 public final class Router: ObservableObject {
-    
+
     fileprivate static var routeHandlers: [String: RouteHandler] = [:]
     
     public static func register(handlers: [RouteHandler]) {
@@ -53,7 +53,9 @@ public final class Router: ObservableObject {
     @Published var presentedSheetDestination: RouteDestination?
     @Published var presentedFullScreenCoverDestination: RouteDestination?
     @Published var dismissPresentedView: Bool?
-    
+
+    @Published public var selectedTab: Int = 0
+
     public func navigate(to path: String,
                          type: NavigationType = .push,
                          params: [String: Any]? = nil) {
@@ -67,7 +69,15 @@ public final class Router: ObservableObject {
             presentedFullScreenCoverDestination = destination
         }
     }
-    
+
+    public func switchTab(to index: Int) {
+        if let parent = parent {
+            parent.switchTab(to: index)
+        } else {
+            selectedTab = index
+        }
+    }
+
     public func openURL(url: URL) {
         let pathString = url.pathString
         let params = url.compactQueryParameters

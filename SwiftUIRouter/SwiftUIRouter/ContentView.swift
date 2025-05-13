@@ -27,23 +27,14 @@ struct RootTabView : View {
                     Label(tab.title, systemImage: tab.image)
                 }.tag(tab)
             }
+        }.onReceive(router.$selectedTab) {
+            guard let tab = RootTabs.init(rawValue: $0) else { return }
+            selectedTab = tab
         }
     }
 }
 
-enum RootTabs: Int, Codable, CaseIterable {
-    
-    case home
-    case book
-    case trip
-    case me
-}
-
-extension RootTabs: Identifiable {
-    
-    var id: String {
-        "\(self)"
-    }
+extension RootTabs {
     
     var title: String {
         switch self {
@@ -64,9 +55,9 @@ extension RootTabs: Identifiable {
     }
 }
 
-extension RootTabs: View {
+extension RootTabs: @retroactive View {
     
-    var body: some View {
+    public var body: some View {
         switch self {
         case .home: HomeView()
         case .book: BookView()

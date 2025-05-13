@@ -22,6 +22,18 @@ public struct RouterTestView: View {
         Button("fullScreenCover a new view") {
             router.navigate(to: "test", type: .fullScreenCover)
         }
+        Button("goto home") {
+            router.switchTab(to: 0)
+        }
+        Button("goto book") {
+            router.switchTab(to: 1)
+        }
+        Button("goto trip") {
+            router.switchTab(to: 2)
+        }
+        Button("goto me") {
+            router.switchTab(to: 3)
+        }
         Button("dismiss") {
             router.pop()
         }
