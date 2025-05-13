@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 
 public enum Owner: Int, Sendable {
-    
+
     case application
     case root
     case presenter
@@ -98,8 +98,7 @@ public extension Router {
             break
         case .root:
             navigationPath.removeLast(navigationPath.count)
-            presentedSheetDestination = nil
-            presentedFullScreenCoverDestination = nil
+            dismissPresentedView = true
         case .presenter:
             parent?.popToRoot()
         }
