@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 
 public enum Owner: Int, Sendable {
+    
     case application
     case root
     case presenter
@@ -44,7 +45,6 @@ public extension Router {
         }
     }
 
-    // TODO: resolve AnyView
     fileprivate static func view(for destination: RouteDestination) -> AnyView? {
         Router.routeHandlers[destination.path].map {
             AnyView($0.view(for: destination))
