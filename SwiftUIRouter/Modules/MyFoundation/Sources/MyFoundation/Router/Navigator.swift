@@ -49,7 +49,7 @@ public extension Router {
         Router.routeHandlers[destination.path]?.view(for: destination)
     }
 
-    fileprivate static func canNavigate(for destination: RouteDestination) -> Bool {
+    private static func canNavigate(for destination: RouteDestination) -> Bool {
         Router.routeHandlers[destination.path] != nil
     }
 
