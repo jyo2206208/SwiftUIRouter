@@ -11,9 +11,9 @@ import SwiftUI
 @MainActor
 public protocol RouteHandler {
     
-    var path: String { get }
-    
-    func view(for destination: RouteDestination) -> AnyView
+    static var path: String { get }
+
+    static func view(for destination: RouteDestination) -> any View
 }
 
 public struct RouteDestination {

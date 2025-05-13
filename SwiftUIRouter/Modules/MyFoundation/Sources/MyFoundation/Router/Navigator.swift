@@ -36,9 +36,9 @@ public final class Router: ObservableObject, @unchecked Sendable {
 @MainActor
 public extension Router {
 
-    private static var routeHandlers: [String: RouteHandler] = [:]
+    private static var routeHandlers: [String: RouteHandler.Type] = [:]
 
-    public static func register(handlers: [RouteHandler]) {
+    public static func register(handlers: [RouteHandler.Type]) {
         handlers.forEach {
             routeHandlers[$0.path] = $0
         }
@@ -46,7 +46,9 @@ public extension Router {
 
     // TODO: resolve AnyView
     fileprivate static func view(for destination: RouteDestination) -> AnyView? {
-        Router.routeHandlers[destination.path]?.view(for: destination)
+        Router.routeHandlers[destination.path].map {
+            AnyView($0.view(for: destination))
+        }
     }
 
     private static func canNavigate(for destination: RouteDestination) -> Bool {

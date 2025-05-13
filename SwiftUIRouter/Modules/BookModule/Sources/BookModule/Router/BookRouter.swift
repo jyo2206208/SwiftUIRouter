@@ -10,11 +10,9 @@ import MyFoundation
 
 public struct BookTestRouterHandler: RouteHandler {
 
-    public var path: String { "test" }
+    public static var path: String { "test" }
 
-    public func view(for destination: RouteDestination) -> AnyView {
-        AnyView(RouterTestView())
+    public static func view(for destination: MyFoundation.RouteDestination) -> any View {
+        RouterTestView()
     }
-
-    public init() {}
 }
