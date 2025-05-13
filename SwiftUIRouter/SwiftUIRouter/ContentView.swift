@@ -16,10 +16,12 @@ import MyService
 struct RootTabView : View {
     
     @SceneStorage("selectedTab") var selectedTab: RootTabs = .home
+    @Environment(\.router) var router
+
     var body: some View {
         TabView(selection: $selectedTab) {
             ForEach(RootTabs.allCases) { tab in
-                RouterView {
+                RouterView(parentRouter: router, owner: .root) {
                     tab
                 }.tabItem {
                     Label(tab.title, systemImage: tab.image)

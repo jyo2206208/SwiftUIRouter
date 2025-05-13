@@ -19,5 +19,5 @@ extension EnvironmentValues {
 @MainActor
 private struct RouterKey: @preconcurrency EnvironmentKey {
     
-    static var defaultValue: Router = Router()
+    static var defaultValue: Router = Router(owner: .application)
 }

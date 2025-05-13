@@ -9,6 +9,12 @@ import Foundation
 import SwiftUI
 import Combine
 
+public enum Owner: Int {
+    case application
+    case root
+    case presenter
+}
+
 @MainActor
 public final class Router: ObservableObject {
     
@@ -21,9 +27,11 @@ public final class Router: ObservableObject {
     }
     
     private let parent: Router?
-    
-    init(parent: Router? = nil) {
+    private let owner: Owner
+
+    init(parent: Router? = nil, owner: Owner) {
         self.parent = parent
+        self.owner = owner
     }
     
     // TODO: resolve AnyView
@@ -75,12 +83,15 @@ public final class Router: ObservableObject {
     }
     
     public func popToRoot() {
-        if let parent = parent {
-            parent.popToRoot()
-        } else {
+        switch owner {
+        case .application:
+            break
+        case .root:
             navigationPath.removeLast(navigationPath.count)
             presentedSheetDestination = nil
             presentedFullScreenCoverDestination = nil
+        case .presenter:
+            parent?.popToRoot()
         }
     }
 }
@@ -88,9 +99,9 @@ public final class Router: ObservableObject {
 public struct RouterView<Content: View>: View {
     @StateObject private var router: Router
     private let content: Content
-    
-    public init(parentRouter: Router? = nil, @ViewBuilder content: () -> Content) {
-        _router = StateObject(wrappedValue: Router(parent: parentRouter))
+
+    public init(parentRouter: Router? = nil, owner: Owner, @ViewBuilder content: () -> Content) {
+        _router = StateObject(wrappedValue: Router(parent: parentRouter, owner: owner))
         self.content = content()
     }
     
@@ -120,14 +131,14 @@ private struct ModalPresenter: ViewModifier {
             .sheet(item: $parent.presentedSheetDestination, onDismiss: {
                 parent.presentedSheetDestination = nil
             }, content: { destination in
-                RouterView(parentRouter: parent) {
+                RouterView(parentRouter: parent, owner: .presenter) {
                     Router.view(for: destination)
                 }
             })
             .fullScreenCover(item: $parent.presentedFullScreenCoverDestination, onDismiss: {
                 parent.presentedFullScreenCoverDestination = nil
             }, content: { destination in
-                RouterView(parentRouter: parent) {
+                RouterView(parentRouter: parent, owner: .presenter) {
                     Router.view(for: destination)
                 }
             })
