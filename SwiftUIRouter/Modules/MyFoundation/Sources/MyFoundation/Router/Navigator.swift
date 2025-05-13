@@ -9,23 +9,14 @@ import Foundation
 import SwiftUI
 import Combine
 
-public enum Owner: Int {
+public enum Owner: Int, Sendable {
     case application
     case root
     case presenter
 }
 
-@MainActor
-public final class Router: ObservableObject {
+public final class Router: ObservableObject, @unchecked Sendable {
 
-    fileprivate static var routeHandlers: [String: RouteHandler] = [:]
-    
-    public static func register(handlers: [RouteHandler]) {
-        handlers.forEach {
-            routeHandlers[$0.path] = $0
-        }
-    }
-    
     private let parent: Router?
     private let owner: Owner
 
@@ -34,27 +25,39 @@ public final class Router: ObservableObject {
         self.owner = owner
     }
     
-    // TODO: resolve AnyView
-    static func view(for destination: RouteDestination) -> AnyView? {
-        if let handler = Router.routeHandlers[destination.path] {
-            return handler.view(for: destination)
-        }
-        
-        for (path, handler) in Router.routeHandlers {
-            if destination.path.hasPrefix(path) {
-                return handler.view(for: destination)
-            }
-        }
-        
-        return nil
-    }
-    
-    @Published var navigationPath = NavigationPath()
+    @Published fileprivate var navigationPath = NavigationPath()
     @Published var presentedSheetDestination: RouteDestination?
     @Published var presentedFullScreenCoverDestination: RouteDestination?
     @Published var dismissPresentedView: Bool?
 
     @Published public var selectedTab: Int = 0
+}
+
+@MainActor
+public extension Router {
+
+    private static var routeHandlers: [String: RouteHandler] = [:]
+
+    public static func register(handlers: [RouteHandler]) {
+        handlers.forEach {
+            routeHandlers[$0.path] = $0
+        }
+    }
+
+    // TODO: resolve AnyView
+    fileprivate static func view(for destination: RouteDestination) -> AnyView? {
+        if let handler = Router.routeHandlers[destination.path] {
+            return handler.view(for: destination)
+        }
+
+        for (path, handler) in Router.routeHandlers {
+            if destination.path.hasPrefix(path) {
+                return handler.view(for: destination)
+            }
+        }
+
+        return nil
+    }
 
     public func navigate(to path: String,
                          type: NavigationType = .push,
@@ -83,7 +86,7 @@ public final class Router: ObservableObject {
         let params = url.compactQueryParameters
         navigate(to: pathString, type: .push, params: params)
     }
-    
+
     public func pop() {
         if navigationPath.isEmpty {
             dismissPresentedView = true
@@ -91,7 +94,7 @@ public final class Router: ObservableObject {
             navigationPath.removeLast()
         }
     }
-    
+
     public func popToRoot() {
         switch owner {
         case .application:
@@ -114,7 +117,7 @@ public struct RouterView<Content: View>: View {
         _router = StateObject(wrappedValue: Router(parent: parentRouter, owner: owner))
         self.content = content()
     }
-    
+
     public var body: some View {
         NavigationStack(path: $router.navigationPath) {
             content

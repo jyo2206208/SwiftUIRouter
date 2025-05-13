@@ -8,16 +8,14 @@
 import SwiftUI
 
 extension EnvironmentValues {
-    
+
     public var router: Router {
         get { self[RouterKey.self] }
         set { self[RouterKey.self] = newValue }
     }
 }
 
-// TODO: check preconcurrency
-@MainActor
-private struct RouterKey: @preconcurrency EnvironmentKey {
-    
-    static var defaultValue: Router = Router(owner: .application)
+private struct RouterKey: EnvironmentKey {
+
+    static let defaultValue: Router = Router(owner: .application)
 }
