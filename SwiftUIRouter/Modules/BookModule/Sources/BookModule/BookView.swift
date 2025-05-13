@@ -14,7 +14,7 @@ public struct BookView: View {
 
     public var body: some View {
         Button("sheet a new view") {
-            navigator.navigate(to: "test", type: .sheet)
+            navigator.navigate(to: "test", type: .push)
         }
     }
     public init() {}

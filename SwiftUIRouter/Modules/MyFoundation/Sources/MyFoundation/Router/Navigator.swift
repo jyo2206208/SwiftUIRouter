@@ -46,23 +46,18 @@ public extension Router {
 
     // TODO: resolve AnyView
     fileprivate static func view(for destination: RouteDestination) -> AnyView? {
-        if let handler = Router.routeHandlers[destination.path] {
-            return handler.view(for: destination)
-        }
+        Router.routeHandlers[destination.path]?.view(for: destination)
+    }
 
-        for (path, handler) in Router.routeHandlers {
-            if destination.path.hasPrefix(path) {
-                return handler.view(for: destination)
-            }
-        }
-
-        return nil
+    fileprivate static func canNavigate(for destination: RouteDestination) -> Bool {
+        Router.routeHandlers[destination.path] != nil
     }
 
     public func navigate(to path: String,
                          type: NavigationType = .push,
                          params: [String: Any]? = nil) {
         let destination = RouteDestination(path: path, params: params)
+        guard Self.canNavigate(for: destination) else { return }
         switch type {
         case .push:
             navigationPath.append(destination)
@@ -124,9 +119,6 @@ public struct RouterView<Content: View>: View {
                 .navigationDestination(for: RouteDestination.self) { destination in
                     if let view = Router.view(for: destination) {
                         view
-                    } else {
-                        // TODO: maybe inject some defaultView
-                        Text("Unknown route: \(destination.path)")
                     }
                 }
         }
