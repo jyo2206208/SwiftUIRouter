@@ -15,7 +15,7 @@ import MyService
 
 struct RootTabView : View {
     
-    @SceneStorage("selectedTab") var selectedTab: RootTabs = .home
+    @State var selectedTab: RootTabs = .home
     @Environment(\.router) var router
 
     var body: some View {
