@@ -11,7 +11,6 @@ import Combine
 
 public enum Owner: Int, Sendable {
 
-    case application
     case root
     case presenter
 }
@@ -105,8 +104,6 @@ public extension Router {
 
     func dismissAllModal() {
         switch owner {
-        case .application:
-            break
         case .root:
             presentedSheetDestination = nil
             presentedFullScreenCoverDestination = nil
@@ -117,8 +114,6 @@ public extension Router {
 
     func dismissAll() {
         switch owner {
-        case .application:
-            break
         case .root:
             navigationPath.removeLast(navigationPath.count)
             presentedSheetDestination = nil
