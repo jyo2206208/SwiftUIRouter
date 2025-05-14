@@ -27,9 +27,9 @@ struct RootTabView : View {
                 }.tabItem {
                     Label(tab.title, systemImage: tab.image)
                 }.tag(tab.rawValue)
-                    .environmentObject(applicationRouter)
             }
-        }.onOpenURL {
+        }.environmentObject(applicationRouter)
+        .onOpenURL {
             guard selectedTab < applicationRouter.rootRouters.count else { return }
             let currentRootRouter = applicationRouter.rootRouters[selectedTab]
             currentRootRouter.openURL(url: $0)
