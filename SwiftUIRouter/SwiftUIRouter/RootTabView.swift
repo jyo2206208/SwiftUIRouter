@@ -6,10 +6,6 @@
 //
 
 import SwiftUI
-import HomeModule
-import BookModule
-import TripModule
-import MeModule
 import MyFoundation
 import MyService
 
