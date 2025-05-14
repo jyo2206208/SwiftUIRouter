@@ -108,7 +108,8 @@ public extension Router {
         case .application:
             break
         case .root:
-            dismissPresentedView = true
+            presentedSheetDestination = nil
+            presentedFullScreenCoverDestination = nil
         case .presenter:
             parent?.dismissAllModal()
         }
@@ -120,7 +121,8 @@ public extension Router {
             break
         case .root:
             navigationPath.removeLast(navigationPath.count)
-            dismissPresentedView = true
+            presentedSheetDestination = nil
+            presentedFullScreenCoverDestination = nil
         case .presenter:
             parent?.dismissAll()
         }
@@ -158,24 +160,31 @@ public struct RouterView<Content: View>: View {
 private struct ModalPresenter: ViewModifier {
     @ObservedObject fileprivate var parent: Router
     @Environment(\.dismiss) var dismiss
-    
+
+    private let router: Router
+
+    init(parent: Router) {
+        self.parent = parent
+        self.router = .init(parent: parent, owner: .presenter)
+    }
+
     func body(content: Content) -> some View {
         content
             .sheet(item: $parent.presentedSheetDestination, onDismiss: {
                 parent.presentedSheetDestination = nil
             }, content: { destination in
-                RouterView(router: .init(wrappedValue: .init(parent: parent, owner: .presenter))) {
+                RouterView(router: .init(wrappedValue: router)) {
                     Router.view(for: destination)
                 }
             })
             .fullScreenCover(item: $parent.presentedFullScreenCoverDestination, onDismiss: {
                 parent.presentedFullScreenCoverDestination = nil
             }, content: { destination in
-                RouterView(router: .init(wrappedValue: .init(parent: parent, owner: .presenter))) {
+                RouterView(router: .init(wrappedValue: router)) {
                     Router.view(for: destination)
                 }
             })
-            .onChange(of: parent.dismissPresentedView) {
+            .onChange(of: router.dismissPresentedView) {
                 dismiss()
             }
     }
