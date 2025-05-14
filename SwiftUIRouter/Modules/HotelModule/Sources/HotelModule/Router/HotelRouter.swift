@@ -24,7 +24,8 @@ public struct HotelDetailRouterHandler: RouteHandler {
     public static var path: String { "hoteldetail" }
 
     public static func view(for destination: MyFoundation.RouteDestination) -> any View {
-        guard let hotelID = destination.params?["hotelID"] as? String else { return AnyView(EmptyView()) }
+        guard let param = destination.param as? [String: String],
+              let hotelID = param["hotelID"] else { return AnyView(EmptyView()) }
         return HotelDetailView(hotelID: hotelID)
     }
 }

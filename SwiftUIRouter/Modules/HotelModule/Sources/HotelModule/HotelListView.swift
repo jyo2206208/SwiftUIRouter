@@ -20,7 +20,7 @@ public struct HotelListView: View {
                 Button(hotel.name) {
                     router.navigate(to: "hoteldetail",
                                     type: .sheet,
-                                    params: ["hotelID": String(hotel.id)])
+                                    param: ["hotelID": String(hotel.id)])
                 }
             }
         }

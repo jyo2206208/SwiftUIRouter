@@ -18,13 +18,13 @@ public protocol RouteHandler {
 
 public struct RouteDestination {
     
-    public let params: [String: Any]?
-    
+    public let param: Any?
+
     let path: String
     
-    init(path: String, params: [String : Any]? = nil) {
+    init(path: String, param: Any? = nil) {
         self.path = path
-        self.params = params
+        self.param = param
     }
 }
 

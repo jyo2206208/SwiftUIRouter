@@ -71,9 +71,9 @@ public extension Router {
     }
 
     func navigate(to path: String,
-                         type: NavigationType = .push,
-                         params: [String: Any]? = nil) {
-        let destination = RouteDestination(path: path, params: params)
+                  type: NavigationType = .push,
+                  param: Any? = nil) {
+        let destination = RouteDestination(path: path, param: param)
         guard Self.canNavigate(for: destination) else { return }
         switch type {
         case .push:
@@ -91,8 +91,8 @@ public extension Router {
 
     func openURL(url: URL) {
         let pathString = url.pathString
-        let params = url.compactQueryParameters
-        navigate(to: pathString, type: .push, params: params)
+        let param = url.compactQueryParameters
+        navigate(to: pathString, type: .push, param: param)
     }
 
     func dismiss() {
@@ -161,30 +161,23 @@ private struct ModalPresenter: ViewModifier {
     @ObservedObject fileprivate var parent: Router
     @Environment(\.dismiss) var dismiss
 
-    private let router: Router
-
-    init(parent: Router) {
-        self.parent = parent
-        self.router = .init(parent: parent, owner: .presenter)
-    }
-
     func body(content: Content) -> some View {
         content
             .sheet(item: $parent.presentedSheetDestination, onDismiss: {
                 parent.presentedSheetDestination = nil
             }, content: { destination in
-                RouterView(router: .init(wrappedValue: router)) {
+                RouterView(router: .init(wrappedValue: .init(parent: parent, owner: .presenter))) {
                     Router.view(for: destination)
                 }
             })
             .fullScreenCover(item: $parent.presentedFullScreenCoverDestination, onDismiss: {
                 parent.presentedFullScreenCoverDestination = nil
             }, content: { destination in
-                RouterView(router: .init(wrappedValue: router)) {
+                RouterView(router: .init(wrappedValue: .init(parent: parent, owner: .presenter))) {
                     Router.view(for: destination)
                 }
             })
-            .onChange(of: router.dismissPresentedView) {
+            .onChange(of: parent.dismissPresentedView) {
                 dismiss()
             }
     }
