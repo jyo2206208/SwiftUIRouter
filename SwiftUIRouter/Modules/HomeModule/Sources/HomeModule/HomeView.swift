@@ -30,6 +30,9 @@ public struct HomeView: View {
         Button("Open URL: swiftuirouter://deeplink/hoteldetail?hotelID=3") {
             router.openURL(url: URL(string: "swiftuirouter://deeplink/hoteldetail?hotelID=3")!)
         }
+        Button("goto me") {
+            router.switchTab(to: 3)
+        }
     }
     
     public init() {}

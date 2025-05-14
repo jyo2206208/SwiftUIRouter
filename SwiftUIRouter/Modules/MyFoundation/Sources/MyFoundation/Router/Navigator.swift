@@ -16,34 +16,39 @@ public enum Owner: Int, Sendable {
     case presenter
 }
 
+public final class ApplicationRouter: ObservableObject {
+
+    public let rootRouters: [Router]
+    @Published public var selectedTab: Int = 0
+
+    public init(rootCount: Int) {
+        rootRouters = (0..<rootCount).map {_ in
+            Router(owner: .root)
+        }
+    }
+}
+
 public final class Router: ObservableObject, @unchecked Sendable {
 
     private let parent: Router?
     private let owner: Owner
 
-    init(parent: Router? = nil, owner: Owner) {
+    public init(parent: Router? = nil, owner: Owner) {
         self.parent = parent
         self.owner = owner
     }
     
     @Published fileprivate var navigationPath = NavigationPath()
-    @Published var presentedSheetDestination: RouteDestination?
-    @Published var presentedFullScreenCoverDestination: RouteDestination?
-    @Published var dismissPresentedView: Bool?
-
-    @Published public var selectedTab: Int = 0
+    @Published fileprivate var presentedSheetDestination: RouteDestination?
+    @Published fileprivate var presentedFullScreenCoverDestination: RouteDestination?
+    @Published fileprivate var dismissPresentedView: Bool?
+    @Published fileprivate var selectedTab: Int = 0
 }
 
 @MainActor
-public extension Router {
+extension Router {
 
     private static var routeHandlers: [String: RouteHandler.Type] = [:]
-
-    public static func register(handlers: [RouteHandler.Type]) {
-        handlers.forEach {
-            routeHandlers[$0.path] = $0
-        }
-    }
 
     fileprivate static func view(for destination: RouteDestination) -> AnyView? {
         Router.routeHandlers[destination.path].map {
@@ -54,8 +59,18 @@ public extension Router {
     private static func canNavigate(for destination: RouteDestination) -> Bool {
         Router.routeHandlers[destination.path] != nil
     }
+}
 
-    public func navigate(to path: String,
+@MainActor
+public extension Router {
+
+    static func register(handlers: [RouteHandler.Type]) {
+        handlers.forEach {
+            routeHandlers[$0.path] = $0
+        }
+    }
+
+    func navigate(to path: String,
                          type: NavigationType = .push,
                          params: [String: Any]? = nil) {
         let destination = RouteDestination(path: path, params: params)
@@ -70,21 +85,17 @@ public extension Router {
         }
     }
 
-    public func switchTab(to index: Int) {
-        if let parent = parent {
-            parent.switchTab(to: index)
-        } else {
-            selectedTab = index
-        }
+    func switchTab(to index: Int) {
+        selectedTab = index
     }
 
-    public func openURL(url: URL) {
+    func openURL(url: URL) {
         let pathString = url.pathString
         let params = url.compactQueryParameters
         navigate(to: pathString, type: .push, params: params)
     }
 
-    public func pop() {
+    func dismiss() {
         if navigationPath.isEmpty {
             dismissPresentedView = true
         } else {
@@ -92,7 +103,18 @@ public extension Router {
         }
     }
 
-    public func popToRoot() {
+    func dismissAllModal() {
+        switch owner {
+        case .application:
+            break
+        case .root:
+            dismissPresentedView = true
+        case .presenter:
+            parent?.dismissAllModal()
+        }
+    }
+
+    func dismissAll() {
         switch owner {
         case .application:
             break
@@ -100,7 +122,7 @@ public extension Router {
             navigationPath.removeLast(navigationPath.count)
             dismissPresentedView = true
         case .presenter:
-            parent?.popToRoot()
+            parent?.dismissAll()
         }
     }
 }
@@ -109,8 +131,10 @@ public struct RouterView<Content: View>: View {
     @StateObject private var router: Router
     private let content: Content
 
-    public init(parentRouter: Router? = nil, owner: Owner, @ViewBuilder content: () -> Content) {
-        _router = StateObject(wrappedValue: Router(parent: parentRouter, owner: owner))
+    @EnvironmentObject var applicationRouter: ApplicationRouter
+
+    public init(router: StateObject<Router>, @ViewBuilder content: () -> Content) {
+        _router = router
         self.content = content()
     }
 
@@ -122,6 +146,9 @@ public struct RouterView<Content: View>: View {
                         view
                     }
                 }
+        }
+        .onReceive(router.$selectedTab) {
+            applicationRouter.selectedTab = $0
         }
         .modifier(ModalPresenter(parent: router))
         .environment(\.router, router)
@@ -137,14 +164,14 @@ private struct ModalPresenter: ViewModifier {
             .sheet(item: $parent.presentedSheetDestination, onDismiss: {
                 parent.presentedSheetDestination = nil
             }, content: { destination in
-                RouterView(parentRouter: parent, owner: .presenter) {
+                RouterView(router: .init(wrappedValue: .init(parent: parent, owner: .presenter))) {
                     Router.view(for: destination)
                 }
             })
             .fullScreenCover(item: $parent.presentedFullScreenCoverDestination, onDismiss: {
                 parent.presentedFullScreenCoverDestination = nil
             }, content: { destination in
-                RouterView(parentRouter: parent, owner: .presenter) {
+                RouterView(router: .init(wrappedValue: .init(parent: parent, owner: .presenter))) {
                     Router.view(for: destination)
                 }
             })

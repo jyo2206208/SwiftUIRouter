@@ -35,10 +35,13 @@ public struct RouterTestView: View {
             router.switchTab(to: 3)
         }
         Button("dismiss") {
-            router.pop()
+            router.dismiss()
         }
         Button("dismissAll") {
-            router.popToRoot()
+            router.dismissAll()
+        }
+        Button("dismissAllModal") {
+            router.dismissAllModal()
         }
     }
     public init() {}
