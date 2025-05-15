@@ -12,8 +12,6 @@ public struct HomeView: View {
     
     @Environment(\.router) var router
     
-    @Environment(\.openURL) private var openURL
-    
     public var body: some View {
         Button("goto hotel list") {
             router.navigate(to: "hotellist")
