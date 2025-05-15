@@ -27,9 +27,8 @@ struct SwiftUIRouterApp: App {
     
     var body: some Scene {
         WindowGroup {
-            let applicationRouter = ApplicationRouter(rootCount: RootTabs.allCases.count)
-            RootTabView(applicationRouter: applicationRouter) {
-                ForEach(Array(zip(RootTabs.allCases, applicationRouter.rootRouters)), id: \.0) { tab, router in
+            RootTabView(tab: RootTabs.self) { tab, routers in
+                ForEach(Array(zip(tab.allCases, routers)), id: \.0) { tab, router in
                     RouterView(router: .init(wrappedValue: router)) {
                         tab
                     }.tabItem {

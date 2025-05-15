@@ -15,15 +15,13 @@ public enum Owner: Int, Sendable {
     case presenter
 }
 
-public final class ApplicationRouter: ObservableObject {
+final class ApplicationRouter: ObservableObject {
 
-    public let rootRouters: [Router]
+    let rootRouters: [Router]
     @Published public var selectedTab: Int = 0
 
-    public init(rootCount: Int) {
-        rootRouters = (0..<rootCount).map {_ in
-            Router(owner: .root)
-        }
+    init(rootRouters: [Router]) {
+        self.rootRouters = rootRouters
     }
 }
 

@@ -13,9 +13,10 @@ public struct RootTabView<Content: View> : View {
     @StateObject var applicationRouter: ApplicationRouter
     let content: Content
 
-    public init(applicationRouter: ApplicationRouter, @ViewBuilder content: () -> Content) {
-        _applicationRouter = .init(wrappedValue: applicationRouter)
-        self.content = content()
+    public init<T: CaseIterable>(tab: T.Type, @ViewBuilder content: (T.Type, [Router]) -> Content) {
+        let rootRouters = tab.allCases.map {_ in Router(owner: .root) }
+        _applicationRouter = .init(wrappedValue: .init(rootRouters: rootRouters))
+        self.content = content(tab, rootRouters)
     }
 
     public var body: some View {
