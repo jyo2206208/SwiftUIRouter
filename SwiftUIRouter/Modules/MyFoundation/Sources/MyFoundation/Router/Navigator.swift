@@ -15,14 +15,11 @@ public enum Owner: Int, Sendable {
     case presenter
 }
 
-final class ApplicationRouter: ObservableObject {
+public enum NavigationType {
 
-    let rootRouters: [Router]
-    @Published public var selectedTab: Int = 0
-
-    init(rootRouters: [Router]) {
-        self.rootRouters = rootRouters
-    }
+    case push
+    case sheet
+    case fullScreenCover
 }
 
 public final class Router: ObservableObject, @unchecked Sendable {
