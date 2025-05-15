@@ -65,7 +65,7 @@ Router.register(handlers: [
 
 2. Navigation
 
-```
+```swift
 public struct HomeView: View {
     
     @Environment(\.router) var router
@@ -86,7 +86,7 @@ public struct HomeView: View {
 
 3. Dismiss
 
-```
+```swift
 Button("dismiss") {
     router.dismiss()
 }
