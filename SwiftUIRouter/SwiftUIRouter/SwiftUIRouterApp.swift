@@ -27,7 +27,16 @@ struct SwiftUIRouterApp: App {
     
     var body: some Scene {
         WindowGroup {
-            RootTabView()
+            let applicationRouter = ApplicationRouter(rootCount: RootTabs.allCases.count)
+            RootTabView(applicationRouter: applicationRouter) {
+                ForEach(Array(zip(RootTabs.allCases, applicationRouter.rootRouters)), id: \.0) { tab, router in
+                    RouterView(router: .init(wrappedValue: router)) {
+                        tab
+                    }.tabItem {
+                        Label(tab.title, systemImage: tab.image)
+                    }.tag(tab.rawValue)
+                }
+            }
         }
     }
 }
