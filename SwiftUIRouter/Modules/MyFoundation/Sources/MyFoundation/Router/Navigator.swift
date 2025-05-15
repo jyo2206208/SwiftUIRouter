@@ -45,8 +45,8 @@ extension Router {
     private static var routeHandlers: [String: RouteHandler.Type] = [:]
 
     fileprivate static func view(for destination: RouteDestination) -> AnyView? {
-        Router.routeHandlers[destination.path].map {
-            AnyView($0.view(for: destination))
+        Router.routeHandlers[destination.path]?.view(for: destination).map {
+            AnyView($0)
         }
     }
 

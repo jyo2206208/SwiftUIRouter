@@ -9,11 +9,11 @@ import Foundation
 import SwiftUI
 
 @MainActor
-public protocol RouteHandler {
-    
+public protocol RouteHandler: View {
+
     static var path: String { get }
 
-    static func view(for destination: RouteDestination) -> any View
+    static func view(for destination: RouteDestination) -> Self?
 }
 
 public struct RouteDestination {

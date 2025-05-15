@@ -8,11 +8,11 @@
 import SwiftUI
 import MyFoundation
 
-public struct BookTestRouterHandler: RouteHandler {
+extension RouterTestView: RouteHandler {
 
     public static var path: String { "test" }
 
-    public static func view(for destination: MyFoundation.RouteDestination) -> any View {
+    public static func view(for destination: RouteDestination) -> RouterTestView? {
         RouterTestView()
     }
 }

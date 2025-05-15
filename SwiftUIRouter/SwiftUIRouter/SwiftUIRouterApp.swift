@@ -19,9 +19,9 @@ struct SwiftUIRouterApp: App {
     
     init() {
         Router.register(handlers: [
-            HotelListRouterHandler.self,
-            HotelDetailRouterHandler.self,
-            BookTestRouterHandler.self
+            HotelListView.self,
+            HotelDetailView.self,
+            RouterTestView.self
         ])
     }
     

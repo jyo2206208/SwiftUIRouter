@@ -29,19 +29,37 @@ dependencies: [
 
 ```swift
 // At First Implement RouteHandler protocol for your target View
-public struct HotelListRouterHandler: RouteHandler {
+public struct HotelListView: View {
+    
+    @Environment(\.router) var router
+    
+    public var body: some View {
+        ForEach(MyService.hotels) { hotel in
+            HStack {
+                Color.red.frame(width: 50, height: 50)
+                Button(hotel.name) {
+                    router.navigate(to: "hoteldetail",
+                                    type: .sheet,
+                                    param: ["hotelID": String(hotel.id)])
+                }
+            }
+        }
+    }
+}
+extension HotelListView: RouteHandler {
 
     public static var path: String { "hotellist" }
 
-    public static func view(for destination: RouteDestination) -> any View {
+    public static func view(for destination: MyFoundation.RouteDestination) -> HotelListView? {
         HotelListView()
     }
 }
+
 ```
 ```swift
 // Sencond, register it after launch
 Router.register(handlers: [
-    HotelListRouterHandler.self
+    HotelListView.self
 ])
 ```
 
@@ -63,8 +81,6 @@ public struct HomeView: View {
             router.switchTab(to: 3)
         }
     }
-    
-    public init() {}
 }
 ```
 

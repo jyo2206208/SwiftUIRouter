@@ -7,25 +7,23 @@
 
 import SwiftUI
 import MyFoundation
-import Combine
-import MyService
 
-public struct HotelListRouterHandler: RouteHandler {
+extension HotelListView: RouteHandler {
 
     public static var path: String { "hotellist" }
 
-    public static func view(for destination: MyFoundation.RouteDestination) -> any View {
+    public static func view(for destination: MyFoundation.RouteDestination) -> HotelListView? {
         HotelListView()
     }
 }
 
-public struct HotelDetailRouterHandler: RouteHandler {
-    
+extension HotelDetailView: RouteHandler {
+
     public static var path: String { "hoteldetail" }
 
-    public static func view(for destination: MyFoundation.RouteDestination) -> any View {
+    public static func view(for destination: RouteDestination) -> HotelDetailView? {
         guard let param = destination.param as? [String: String],
-              let hotelID = param["hotelID"] else { return AnyView(EmptyView()) }
+              let hotelID = param["hotelID"] else { return nil }
         return HotelDetailView(hotelID: hotelID)
     }
 }
