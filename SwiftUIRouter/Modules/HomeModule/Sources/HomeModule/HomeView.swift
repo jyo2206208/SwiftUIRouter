@@ -11,7 +11,7 @@ import MyFoundation
 public struct HomeView: View {
     
     @Environment(\.router) var router
-    
+
     public var body: some View {
         Button("goto hotel list") {
             router.navigate(to: "hotellist")
