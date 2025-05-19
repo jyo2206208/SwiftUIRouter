@@ -7,8 +7,8 @@
 
 import Foundation
 
-public extension URL {
-    
+extension URL {
+
     var pathString: String {
         if let first = pathComponents.first, first == "/" {
             return pathComponents.dropFirst().joined(separator: "/")
@@ -26,8 +26,8 @@ public extension URL {
     }
 }
 
-public extension URLComponents {
-    
+extension URLComponents {
+
     var queryParameters: [String: String?] {
         (queryItems ?? []).reduce(into: [String: String?](), { $0[$1.name] = $1.value })
     }
