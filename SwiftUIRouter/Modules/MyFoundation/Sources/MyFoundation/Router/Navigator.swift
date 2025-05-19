@@ -119,18 +119,13 @@ public extension Router {
     }
 }
 
-public struct RouterView<Content: View>: View {
+public struct RouterViewModifier: ViewModifier {
+
     @StateObject private var router: Router
-    private let content: Content
 
     @EnvironmentObject var applicationRouter: ApplicationRouter
 
-    public init(router: StateObject<Router>, @ViewBuilder content: () -> Content) {
-        _router = router
-        self.content = content()
-    }
-
-    public var body: some View {
+    public func body(content: Content) -> some View {
         NavigationStack(path: $router.navigationPath) {
             content
                 .navigationDestination(for: RouteDestination.self) { destination in
@@ -145,6 +140,10 @@ public struct RouterView<Content: View>: View {
         .modifier(ModalPresenter(parent: router))
         .environment(\.router, router)
     }
+
+    public init(router: Router) {
+        _router = .init(wrappedValue: router)
+    }
 }
 
 private struct ModalPresenter: ViewModifier {
@@ -156,16 +155,12 @@ private struct ModalPresenter: ViewModifier {
             .sheet(item: $parent.presentedSheetDestination, onDismiss: {
                 parent.presentedSheetDestination = nil
             }, content: { destination in
-                RouterView(router: .init(wrappedValue: .init(parent: parent, owner: .presenter))) {
-                    Router.view(for: destination)
-                }
+                Router.view(for: destination)?.modifier(RouterViewModifier(router: .init(parent: parent, owner: .presenter)))
             })
             .fullScreenCover(item: $parent.presentedFullScreenCoverDestination, onDismiss: {
                 parent.presentedFullScreenCoverDestination = nil
             }, content: { destination in
-                RouterView(router: .init(wrappedValue: .init(parent: parent, owner: .presenter))) {
-                    Router.view(for: destination)
-                }
+                Router.view(for: destination)?.modifier(RouterViewModifier(router: .init(parent: parent, owner: .presenter)))
             })
             .onChange(of: parent.dismissPresentedView) {
                 dismiss()

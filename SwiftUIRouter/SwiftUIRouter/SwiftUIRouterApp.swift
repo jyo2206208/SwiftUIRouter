@@ -29,11 +29,10 @@ struct SwiftUIRouterApp: App {
         WindowGroup {
             RootTabView(tab: RootTabs.self) { tab, routers in
                 ForEach(Array(zip(tab.allCases, routers)), id: \.0) { tab, router in
-                    RouterView(router: .init(wrappedValue: router)) {
-                        tab
-                    }.tabItem {
-                        Label(tab.title, systemImage: tab.image)
-                    }.tag(tab.rawValue)
+                    tab
+                        .modifier(RouterViewModifier(router: router))
+                        .tabItem { Label(tab.title, systemImage: tab.image) }
+                        .tag(tab.rawValue)
                 }
             }
         }
