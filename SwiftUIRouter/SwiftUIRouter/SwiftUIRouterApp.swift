@@ -24,7 +24,14 @@ struct SwiftUIRouterApp: App {
             RouterTestView.self
         ])
     }
-    
+
+//    var body: some Scene {
+//        WindowGroup {
+//            HomeView()
+//                .modifier(RouterViewModifier(router: .init(owner: .root)))
+//        }
+//    }
+
     var body: some Scene {
         WindowGroup {
             RootTabView(tab: RootTabs.self) { tab, routers in
