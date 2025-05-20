@@ -25,24 +25,24 @@ struct SwiftUIRouterApp: App {
         ])
     }
 
-//    var body: some Scene {
-//        WindowGroup {
-//            HomeView().routable(by: .init(owner: .root))
-//        }
-//    }
-
     var body: some Scene {
         WindowGroup {
-            RootTabView(tab: RootTabs.self) { tab, routers in
-                ForEach(Array(zip(tab.allCases, routers)), id: \.0) { tab, router in
-                    tab
-                        .routable(by: router)
-                        .tabItem { Label(tab.title, systemImage: tab.image) }
-                        .tag(tab.rawValue)
-                }
-            }
+            HomeView().router(.init(owner: .root))
         }
     }
+
+//    var body: some Scene {
+//        WindowGroup {
+//            RootTabView(tab: RootTabs.self) { tab, routers in
+//                ForEach(Array(zip(tab.allCases, routers)), id: \.0) { tab, router in
+//                    tab
+//                        .router(router)
+//                        .tabItem { Label(tab.title, systemImage: tab.image) }
+//                        .tag(tab.rawValue)
+//                }
+//            }
+//        }
+//    }
 }
 
 extension RootTabs {

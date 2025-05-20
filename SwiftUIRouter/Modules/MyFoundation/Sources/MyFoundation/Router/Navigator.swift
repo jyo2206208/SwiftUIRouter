@@ -155,12 +155,12 @@ private struct ModalPresenter: ViewModifier {
             .sheet(item: $parent.presentedSheetDestination, onDismiss: {
                 parent.presentedSheetDestination = nil
             }, content: { destination in
-                Router.view(for: destination)?.routable(by: .init(owner: .presenter))
+                Router.view(for: destination)?.router(.init(owner: .presenter))
             })
             .fullScreenCover(item: $parent.presentedFullScreenCoverDestination, onDismiss: {
                 parent.presentedFullScreenCoverDestination = nil
             }, content: { destination in
-                Router.view(for: destination)?.routable(by: .init(owner: .presenter))
+                Router.view(for: destination)?.router(.init(owner: .presenter))
             })
             .onChange(of: parent.dismissPresentedView) {
                 dismiss()
@@ -170,7 +170,7 @@ private struct ModalPresenter: ViewModifier {
 
 public extension View {
 
-    func routable(by router: Router) -> some View {
+    func router(_ router: Router) -> some View {
         modifier(RouterViewModifier(router: router))
     }
 }
