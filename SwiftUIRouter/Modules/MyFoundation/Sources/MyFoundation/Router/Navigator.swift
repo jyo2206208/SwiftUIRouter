@@ -119,13 +119,13 @@ public extension Router {
     }
 }
 
-public struct RouterViewModifier: ViewModifier {
+private struct RouterViewModifier: ViewModifier {
 
     @StateObject private var router: Router
 
     @EnvironmentObject var applicationRouter: ApplicationRouter
 
-    public func body(content: Content) -> some View {
+    func body(content: Content) -> some View {
         NavigationStack(path: $router.navigationPath) {
             content
                 .navigationDestination(for: RouteDestination.self) { destination in
@@ -141,7 +141,7 @@ public struct RouterViewModifier: ViewModifier {
         .environment(\.router, router)
     }
 
-    public init(router: Router) {
+    init(router: Router) {
         _router = .init(wrappedValue: router)
     }
 }
@@ -165,5 +165,12 @@ private struct ModalPresenter: ViewModifier {
             .onChange(of: parent.dismissPresentedView) {
                 dismiss()
             }
+    }
+}
+
+public extension View {
+
+    func routable(by router: Router) -> some View {
+        modifier(RouterViewModifier(router: router))
     }
 }

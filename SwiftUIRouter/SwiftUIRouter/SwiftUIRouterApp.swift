@@ -27,8 +27,7 @@ struct SwiftUIRouterApp: App {
 
 //    var body: some Scene {
 //        WindowGroup {
-//            HomeView()
-//                .modifier(RouterViewModifier(router: .init(owner: .root)))
+//            HomeView().routable(by: .init(owner: .root))
 //        }
 //    }
 
@@ -37,7 +36,7 @@ struct SwiftUIRouterApp: App {
             RootTabView(tab: RootTabs.self) { tab, routers in
                 ForEach(Array(zip(tab.allCases, routers)), id: \.0) { tab, router in
                     tab
-                        .modifier(RouterViewModifier(router: router))
+                        .routable(by: router)
                         .tabItem { Label(tab.title, systemImage: tab.image) }
                         .tag(tab.rawValue)
                 }
