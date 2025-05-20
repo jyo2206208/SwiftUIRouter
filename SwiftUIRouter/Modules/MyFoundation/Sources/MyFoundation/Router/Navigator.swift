@@ -155,12 +155,12 @@ private struct ModalPresenter: ViewModifier {
             .sheet(item: $parent.presentedSheetDestination, onDismiss: {
                 parent.presentedSheetDestination = nil
             }, content: { destination in
-                Router.view(for: destination)?.router(.init(owner: .presenter))
+                Router.view(for: destination)?.router(.init(parent: parent, owner: .presenter))
             })
             .fullScreenCover(item: $parent.presentedFullScreenCoverDestination, onDismiss: {
                 parent.presentedFullScreenCoverDestination = nil
             }, content: { destination in
-                Router.view(for: destination)?.router(.init(owner: .presenter))
+                Router.view(for: destination)?.router(.init(parent: parent, owner: .presenter))
             })
             .onChange(of: parent.dismissPresentedView) {
                 dismiss()
