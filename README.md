@@ -20,7 +20,7 @@ A lightweight SwiftUI routing framework using registration-based decoupling, sup
 Add to your Package.swift:
 ```swift
 dependencies: [
-    .package(url: "xxx.git", from: "1.0.0")
+    .package(url: "git@github.com:jyo2206208/SwiftUIRouter.git", from: "1.0.0")
 ]
 ```
 
