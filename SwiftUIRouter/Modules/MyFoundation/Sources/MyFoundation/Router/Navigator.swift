@@ -22,7 +22,7 @@ public enum NavigationType {
     case fullScreenCover
 }
 
-public final class Router: ObservableObject, @unchecked Sendable {
+public final class Router: ObservableObject {
 
     private let parent: Router?
     private let owner: Owner

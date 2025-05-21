@@ -17,5 +17,5 @@ extension EnvironmentValues {
 
 private struct RouterKey: EnvironmentKey {
 
-    static let defaultValue: Router = Router(owner: .root())
+    nonisolated(unsafe) static let defaultValue: Router = Router(owner: .root())
 }
