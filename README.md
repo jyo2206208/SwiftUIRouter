@@ -34,7 +34,7 @@ extension HotelListView: RouteHandler {
 
     public static var path: String { "hotellist" }
 
-    public static func view(for destination: MyFoundation.RouteDestination) -> HotelListView? {
+    public static func view(for destination: RouteDestination) -> HotelListView? {
         HotelListView()
     }
 }
@@ -58,39 +58,39 @@ var body: some View {
 ```
 ```swift
 // add router ability for a TavView based app
-	@State private var selectedTab = 0
-    var body: some View {
-        let routerTuples: [(RootTabs, Router)] = RootTabs.allCases.map {
-            ($0, Router(owner: .root($selectedTab)))
-        }
-        TabView(selection: $selectedTab) {
-            ForEach(routerTuples, id: \.0) { tab, router in
-                tab
-                    .router(router)
-                    .tabItem { Label(tab.title, systemImage: tab.image) }
-                    .tag(tab.rawValue)
-            }
+@State private var selectedTab = 0
+var body: some View {
+    let routerTuples: [(RootTabs, Router)] = RootTabs.allCases.map {
+        ($0, Router(owner: .root($selectedTab)))
+    }
+    TabView(selection: $selectedTab) {
+        ForEach(routerTuples, id: \.0) { tab, router in
+            tab
+                .router(router)
+                .tabItem { Label(tab.title, systemImage: tab.image) }
+                .tag(tab.rawValue)
         }
     }
+}
 ```
 ```swift
-    var body: some View {
-        let routerTuples: [(RootTabs, Router)] = RootTabs.allCases.map {
-            ($0, Router(owner: .root($selectedTab)))
-        }
-        TabView(selection: $selectedTab) {
-            ForEach(routerTuples, id: \.0) { tab, router in
-                tab
-                    .router(router)
-                    .tabItem { Label(tab.title, systemImage: tab.image) }
-                    .tag(tab.rawValue)
-
-            }
-        }.onOpenURL {
-            guard routerTuples.count > selectedTab else { return }
-            routerTuples[selectedTab].1.openURL(url: $0)
-        }
+var body: some View {
+    let routerTuples: [(RootTabs, Router)] = RootTabs.allCases.map {
+        ($0, Router(owner: .root($selectedTab)))
     }
+    TabView(selection: $selectedTab) {
+        ForEach(routerTuples, id: \.0) { tab, router in
+            tab
+                .router(router)
+                .tabItem { Label(tab.title, systemImage: tab.image) }
+                .tag(tab.rawValue)
+
+        }
+    }.onOpenURL {
+        guard routerTuples.count > selectedTab else { return }
+        routerTuples[selectedTab].1.openURL(url: $0)
+    }
+}
 ```
 
 
