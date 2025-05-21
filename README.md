@@ -28,24 +28,6 @@ dependencies: [
 1. Register Routes
 
 ```swift
-// At First Implement RouteHandler protocol for your target View
-public struct HotelListView: View {
-    
-    @Environment(\.router) var router
-    
-    public var body: some View {
-        ForEach(MyService.hotels) { hotel in
-            HStack {
-                Color.red.frame(width: 50, height: 50)
-                Button(hotel.name) {
-                    router.navigate(to: "hoteldetail",
-                                    type: .sheet,
-                                    param: ["hotelID": String(hotel.id)])
-                }
-            }
-        }
-    }
-}
 extension HotelListView: RouteHandler {
 
     public static var path: String { "hotellist" }
@@ -63,7 +45,54 @@ Router.register(handlers: [
 ])
 ```
 
-2. Navigation
+2. add router ability
+
+```swift
+// add router ability for a rootView
+var body: some View {
+    HomeView().router(.init(owner: .root()))
+}
+
+```
+```swift
+// add router ability for a TavView based app
+	@State private var selectedTab = 0
+    var body: some View {
+        let routerTuples: [(RootTabs, Router)] = RootTabs.allCases.map {
+            ($0, Router(owner: .root($selectedTab)))
+        }
+        TabView(selection: $selectedTab) {
+            ForEach(routerTuples, id: \.0) { tab, router in
+                tab
+                    .router(router)
+                    .tabItem { Label(tab.title, systemImage: tab.image) }
+                    .tag(tab.rawValue)
+            }
+        }
+    }
+```
+```swift
+    var body: some View {
+        let routerTuples: [(RootTabs, Router)] = RootTabs.allCases.map {
+            ($0, Router(owner: .root($selectedTab)))
+        }
+        TabView(selection: $selectedTab) {
+            ForEach(routerTuples, id: \.0) { tab, router in
+                tab
+                    .router(router)
+                    .tabItem { Label(tab.title, systemImage: tab.image) }
+                    .tag(tab.rawValue)
+
+            }
+        }.onOpenURL {
+            guard routerTuples.count > selectedTab else { return }
+            routerTuples[selectedTab].1.openURL(url: $0)
+        }
+    }
+```
+
+
+ * Navigation
 
 ```swift
 public struct HomeView: View {
@@ -84,7 +113,7 @@ public struct HomeView: View {
 }
 ```
 
-3. Dismiss
+ * Dismiss
 
 ```swift
 Button("dismiss") {
