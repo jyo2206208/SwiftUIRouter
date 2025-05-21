@@ -25,24 +25,9 @@ struct SwiftUIRouterApp: App {
         ])
     }
 
-//    var body: some Scene {
-//        WindowGroup {
-//            HomeView().router(.init(owner: .root()))
-//        }
-//    }
-
-    @State private var selectedTab = 0
-
     var body: some Scene {
         WindowGroup {
-            TabView(selection: $selectedTab) {
-                ForEach(RootTabs.allCases.map { ($0, Router(owner: .root($selectedTab))) }, id: \.0) { tab, router in
-                    tab
-                        .router(router)
-                        .tabItem { Label(tab.title, systemImage: tab.image) }
-                        .tag(tab.rawValue)
-                }
-            }
+            ContentView()
         }
     }
 }
