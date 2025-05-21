@@ -25,10 +25,25 @@ struct SwiftUIRouterApp: App {
         ])
     }
 
+//    var body: some Scene {
+//        WindowGroup {
+//            RootTabView(tab: RootTabs.self) { tab, routers in
+//                ForEach(Array(zip(tab.allCases, routers)), id: \.0) { tab, router in
+//                    tab
+//                        .router(router)
+//                        .tabItem { Label(tab.title, systemImage: tab.image) }
+//                        .tag(tab.rawValue)
+//                }
+//            }
+//        }
+//    }
+
+    @State private var selectedTab = 0
+
     var body: some Scene {
         WindowGroup {
-            RootTabView(tab: RootTabs.self) { tab, routers in
-                ForEach(Array(zip(tab.allCases, routers)), id: \.0) { tab, router in
+            TabView(selection: $selectedTab) {
+                ForEach(RootTabs.allCases.map { ($0, Router(owner: .root($selectedTab))) }, id: \.0) { tab, router in
                     tab
                         .router(router)
                         .tabItem { Label(tab.title, systemImage: tab.image) }

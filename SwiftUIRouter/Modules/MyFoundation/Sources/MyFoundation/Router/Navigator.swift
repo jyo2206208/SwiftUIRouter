@@ -9,9 +9,9 @@ import Foundation
 import SwiftUI
 import Combine
 
-public enum Owner: Int, Sendable {
+public enum Owner: Sendable {
 
-    case root
+    case root(Binding<Int>? = nil)
     case presenter
 }
 
@@ -80,7 +80,12 @@ public extension Router {
     }
 
     func switchTab(to index: Int) {
-        selectedTab = index
+        switch owner {
+        case var .root(selectedTab):
+            selectedTab?.wrappedValue = index
+        case .presenter:
+            parent?.switchTab(to: index)
+        }
     }
 
     func openURL(url: URL) {
@@ -123,8 +128,6 @@ private struct RouterViewModifier: ViewModifier {
 
     @StateObject private var router: Router
 
-    @EnvironmentObject var applicationRouter: ApplicationRouter
-
     func body(content: Content) -> some View {
         NavigationStack(path: $router.navigationPath) {
             content
@@ -133,9 +136,6 @@ private struct RouterViewModifier: ViewModifier {
                         view
                     }
                 }
-        }
-        .onReceive(router.$selectedTab) {
-            applicationRouter.selectedTab = $0
         }
         .modifier(ModalPresenter(parent: router))
         .environment(\.router, router)

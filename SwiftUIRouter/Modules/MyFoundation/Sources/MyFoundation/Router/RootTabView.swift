@@ -24,7 +24,7 @@ public struct RootTabView<Content: View> : View {
     let content: Content
 
     public init<T: CaseIterable>(tab: T.Type, @ViewBuilder content: (T.Type, [Router]) -> Content) {
-        let rootRouters = tab.allCases.map {_ in Router(owner: .root) }
+        let rootRouters = tab.allCases.map {_ in Router(owner: .root()) }
         _applicationRouter = .init(wrappedValue: .init(rootRouters: rootRouters))
         self.content = content(tab, rootRouters)
     }
