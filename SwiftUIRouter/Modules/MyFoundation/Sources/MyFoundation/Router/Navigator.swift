@@ -36,7 +36,6 @@ public final class Router: ObservableObject, @unchecked Sendable {
     @Published fileprivate var presentedSheetDestination: RouteDestination?
     @Published fileprivate var presentedFullScreenCoverDestination: RouteDestination?
     @Published fileprivate var dismissPresentedView: Bool?
-    @Published fileprivate var selectedTab: Int = 0
 }
 
 @MainActor
