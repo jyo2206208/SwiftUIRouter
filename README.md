@@ -1,10 +1,10 @@
 # SwiftUIRouter
 
-[![Support](https://img.shields.io/badge/support-iOS%2017%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)&nbsp;
+[![Support](https://img.shields.io/badge/support-iOS%2017%2B-blue.svg?style=flat)](https://www.apple.com/nl/ios/)&nbsp;
 
 A lightweight SwiftUI routing framework using registration-based decoupling, supporting URL Schemes and Universal Links.
 
-[Example](https://github.com/jyo2206208/SwiftUIRouterExample)
+[Example Project](https://github.com/jyo2206208/SwiftUIRouterExample)
 
 ## Features
 
@@ -14,20 +14,24 @@ A lightweight SwiftUI routing framework using registration-based decoupling, sup
   - In-app routing
   - URL Scheme navigation
   - Universal Links handling
+- **Navigation Control**:
+  - Tab switching
+  - View dismissal (single, all, or modal-only)
 
 ## Installation
 
 ### Swift Package Manager
 
-Add to your Package.swift:
+Add the dependency to your `Package.swift`:
+
 ```swift
 dependencies: [
-    .package(url: "git@github.com:jyo2206208/SwiftUIRouter.git", from: "1.0.0")
+    .package(url: "https://github.com/jyo2206208/SwiftUIRouter.git", from: "1.0.0")
 ]
 ```
 
 ## Usage
-1. Register Routes
+1. Register Routers for your View
 
 ```swift
 extension HotelListView: RouteHandler {
@@ -41,13 +45,13 @@ extension HotelListView: RouteHandler {
 
 ```
 ```swift
-// Sencond, register it after launch
+// Second, register it after launch
 Router.register(handlers: [
     HotelListView.self
 ])
 ```
 
-2. add router ability
+2. Add router ability
 
 ```swift
 // add router ability for a rootView
@@ -57,7 +61,7 @@ var body: some View {
 
 ```
 ```swift
-// add router ability for a TavView based app
+// add router ability for a TabView based app
 @State private var selectedTab = 0
 var body: some View {
     let routerTuples: [(RootTabs, Router)] = RootTabs.allCases.map {
