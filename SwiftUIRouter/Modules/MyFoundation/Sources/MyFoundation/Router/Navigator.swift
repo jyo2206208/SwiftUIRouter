@@ -173,3 +173,29 @@ public extension View {
         modifier(RouterViewModifier(router: router))
     }
 }
+
+private extension URL {
+
+    var pathString: String {
+        if let first = pathComponents.first, first == "/" {
+            return pathComponents.dropFirst().joined(separator: "/")
+        }
+        return pathComponents.joined(separator: "/")
+    }
+
+    var queryParameters: [String: String?] {
+        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false) else { return [:] }
+        return components.queryParameters
+    }
+
+    var compactQueryParameters: [String: String] {
+        queryParameters.compactMapValues({ $0 })
+    }
+}
+
+private extension URLComponents {
+
+    var queryParameters: [String: String?] {
+        (queryItems ?? []).reduce(into: [String: String?](), { $0[$1.name] = $1.value })
+    }
+}
