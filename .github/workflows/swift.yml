@@ -36,7 +36,7 @@ jobs:
       run: |
         xcodebuild \
           -scheme "SwiftUIRouter" \
-          -destination 'platform=iOS Simulator,name=iPhone 15' \
+          -destination 'platform=iOS Simulator,name=iPhone 16' \
           -parallelizeTargets \
           -quiet \
           clean build
@@ -45,4 +45,4 @@ jobs:
       run: |
         xcodebuild test \
           -scheme "SwiftUIRouter" \
-          -destination 'platform=iOS Simulator,name=iPhone 15'
+          -destination 'platform=iOS Simulator,name=iPhone 16'
