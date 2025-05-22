@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Setup Swift
-    - uses: SwiftyLab/setup-swift@latest
+      uses: SwiftyLab/setup-swift@latest
     - name: Build
       run: xcodebuild -scheme "SwiftUIRouter" -destination 'platform=iOS Simulator,name=iPhone 16' clean build
     - name: Run tests
