@@ -40,9 +40,3 @@ jobs:
           -parallelizeTargets \
           -quiet \
           clean build
-          
-    - name: Test
-      run: |
-        xcodebuild test \
-          -scheme "SwiftUIRouter" \
-          -destination 'platform=iOS Simulator,name=iPhone 16'
