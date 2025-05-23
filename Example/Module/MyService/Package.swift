@@ -11,9 +11,9 @@ let package = Package(
             name: "MyService",
             targets: ["MyService"]),
     ],
-    dependencies: [
-        .package(path: "../..")
-    ],
+     dependencies: [
+         .package(path: "../../..")
+     ],
     targets: [
         .target(
             name: "MyService", dependencies: ["SwiftUIRouter"]),

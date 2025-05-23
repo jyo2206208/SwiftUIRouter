@@ -24,7 +24,7 @@ Add the dependency to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/jyo2206208/SwiftUIRouter.git", from: "1.0.2")
+    .package(url: "https://github.com/jyo2206208/SwiftUIRouter.git", from: "x.x.x")
 ]
 ```
 

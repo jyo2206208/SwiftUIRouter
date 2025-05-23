@@ -20,7 +20,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E37698CB2DE0266500096AB4 /* Exceptions for "SwiftUIRouterExample" folder in "SwiftUIRouterExample" target */ = {
+		E36377A12DE03F24001D27BD /* Exceptions for "SwiftUIRouterExample" folder in "SwiftUIRouterExample" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -33,7 +33,7 @@
 		E31B50812DDDF48600587A29 /* SwiftUIRouterExample */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				E37698CB2DE0266500096AB4 /* Exceptions for "SwiftUIRouterExample" folder in "SwiftUIRouterExample" target */,
+				E36377A12DE03F24001D27BD /* Exceptions for "SwiftUIRouterExample" folder in "SwiftUIRouterExample" target */,
 			);
 			path = SwiftUIRouterExample;
 			sourceTree = "<group>";
@@ -129,7 +129,6 @@
 			mainGroup = E31B50762DDDF48600587A29;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				E31B50932DDDF5F300587A29 /* XCLocalSwiftPackageReference "../SwiftUIRouter" */,
 				E31B50962DDDF60000587A29 /* XCLocalSwiftPackageReference "Module/BookModule" */,
 				E31B50992DDDF60D00587A29 /* XCLocalSwiftPackageReference "Module/HotelModule" */,
 				E31B509C2DDDF61800587A29 /* XCLocalSwiftPackageReference "Module/MeModule" */,
@@ -370,10 +369,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		E31B50932DDDF5F300587A29 /* XCLocalSwiftPackageReference "../SwiftUIRouter" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../SwiftUIRouter;
-		};
 		E31B50962DDDF60000587A29 /* XCLocalSwiftPackageReference "Module/BookModule" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Module/BookModule;
