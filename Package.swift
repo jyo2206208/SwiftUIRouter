@@ -18,6 +18,7 @@ let package = Package(
         .target(
             name: "SwiftUIRouter",
             path: "Source",
-            exclude: ["../Example"]),
+            exclude: ["../Example"],
+            sources: ["EnvironmentValues+Router.swift", "RouteDestination.swift", "Router.swift"]),
     ]
 )
