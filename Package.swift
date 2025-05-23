@@ -18,6 +18,6 @@ let package = Package(
         .target(
             name: "SwiftUIRouter",
             path: "Source",
-            exclude: ["Example"]),
+            exclude: ["../Example"]),
     ]
 )
