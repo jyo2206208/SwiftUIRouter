@@ -4,6 +4,7 @@
 
 A lightweight SwiftUI routing framework using registration-based decoupling, supporting URL Schemes and Universal Links.
 
+
 ## Features
 
 - **Decoupling**: Zero coupling between modules through registration mechanism
