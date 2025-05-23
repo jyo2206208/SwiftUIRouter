@@ -13,17 +13,25 @@ struct ContentView: View {
 
     @State private var selectedTab = 0
 
+    // If you want try a none tab based app, open this and public HomeView and it's extensions in HomeModule
 //    var body: some View {
-//        HomeView().router(.init(owner: .root()))
+//        let router: Router = .root()
+//        HomeView()
+//            .router(router)
+//            .onOpenURL { url in
+//                let pathString = url.pathString
+//                let param = url.compactQueryParameters
+//                router.navigate(to: pathString, type: .push, param: param)
+//            }
 //    }
 
 //    var body: some View {
 //        let routerTuples: [(RootTabs, Router)] = RootTabs.allCases.map {
-//            ($0, Router(owner: .root($selectedTab)))
+//            ($0, .root($selectedTab))
 //        }
 //        TabView(selection: $selectedTab) {
 //            ForEach(routerTuples, id: \.0) { tab, router in
-//                tab
+//                Router.rootView(for: tab.rawValue)
 //                    .router(router)
 //                    .tabItem { Label(tab.title, systemImage: tab.image) }
 //                    .tag(tab.rawValue)
@@ -33,7 +41,7 @@ struct ContentView: View {
 
     var body: some View {
         let routerTuples: [(RootTabs, Router)] = RootTabs.allCases.map {
-            ($0, Router(owner: .root($selectedTab)))
+            ($0, .root($selectedTab))
         }
         TabView(selection: $selectedTab) {
             ForEach(routerTuples, id: \.0) { tab, router in

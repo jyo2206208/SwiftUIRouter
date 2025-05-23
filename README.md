@@ -35,9 +35,9 @@ dependencies: [
 ```swift
 extension HotelListView: RouteHandler {
 
-    public static var path: String { "hotellist" }
+    static var path: String { "hotellist" }
 
-    public static func view(for destination: RouteDestination) -> HotelListView? {
+    static func view(for destination: RouteDestination) -> HotelListView? {
         HotelListView()
     }
 }
@@ -55,7 +55,7 @@ Router.register(handlers: [
 ```swift
 // add router ability for a rootView
 var body: some View {
-    HomeView().router(.init(owner: .root()))
+    HomeView().router(.root())
 }
 
 ```
@@ -64,11 +64,11 @@ var body: some View {
 @State private var selectedTab = 0
 var body: some View {
     let routerTuples: [(RootTabs, Router)] = RootTabs.allCases.map {
-        ($0, Router(owner: .root($selectedTab)))
+        ($0, .root($selectedTab))
     }
     TabView(selection: $selectedTab) {
         ForEach(routerTuples, id: \.0) { tab, router in
-            tab
+            Router.rootView(for: tab.rawValue)
                 .router(router)
                 .tabItem { Label(tab.title, systemImage: tab.image) }
                 .tag(tab.rawValue)
@@ -77,21 +77,25 @@ var body: some View {
 }
 ```
 ```swift
+// If you want handler URL just add .openURL function
 var body: some View {
     let routerTuples: [(RootTabs, Router)] = RootTabs.allCases.map {
-        ($0, Router(owner: .root($selectedTab)))
+        ($0, .root($selectedTab))
     }
     TabView(selection: $selectedTab) {
         ForEach(routerTuples, id: \.0) { tab, router in
-            tab
+            Router
+                .rootView(for: tab.rawValue)
                 .router(router)
                 .tabItem { Label(tab.title, systemImage: tab.image) }
                 .tag(tab.rawValue)
 
         }
-    }.onOpenURL {
+    }.onOpenURL { url in
         guard routerTuples.count > selectedTab else { return }
-        routerTuples[selectedTab].1.openURL(url: $0)
+        let pathString = url.pathString
+        let param = url.compactQueryParameters
+        routerTuples[selectedTab].1.navigate(to: pathString, type: .push, param: param)
     }
 }
 ```
@@ -100,16 +104,17 @@ var body: some View {
  * Navigation
 
 ```swift
-public struct HomeView: View {
+ struct HomeView: View {
     
     @Environment(\.router) var router
+    @Environment(\.openURL) var openURL
     
-    public var body: some View {
+    var body: some View {
         Button("goto hotel list") {
             router.navigate(to: "hotellist")
         }
         Button("Open URL: swiftuirouter://deeplink/hotellist") {
-            router.openURL(url: URL(string: "swiftuirouter://deeplink/hotellist")!)
+            openURL(URL(string: "swiftuirouter://deeplink/hotellist")!)
         }
         Button("goto me") {
             router.switchTab(to: 3)

@@ -27,7 +27,7 @@ public final class Router: ObservableObject {
     private let parent: Router?
     private let owner: Owner
 
-    public init(parent: Router? = nil, owner: Owner) {
+    init(parent: Router? = nil, owner: Owner) {
         self.parent = parent
         self.owner = owner
     }
@@ -56,6 +56,8 @@ extension Router {
 
 @MainActor
 public extension Router {
+
+    static func root(_ seletedTab: Binding<Int>? = nil) -> Router { Router(owner: .root(seletedTab)) }
 
     static func register(handlers: [any RouteHandler.Type]) {
         handlers.forEach {
