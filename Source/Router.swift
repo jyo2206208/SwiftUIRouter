@@ -1,8 +1,8 @@
 //
 //  Router.swift
-//  MyFoundation
+//  SwiftUIRouter
 //
-//  Created by 杜晔 on 2025/4/24.
+//  Created by Ethan.Du on 2025/4/24.
 //
 
 import Foundation
@@ -87,12 +87,6 @@ public extension Router {
         }
     }
 
-    func openURL(url: URL) {
-        let pathString = url.pathString
-        let param = url.compactQueryParameters
-        navigate(to: pathString, type: .push, param: param)
-    }
-
     func dismiss() {
         if navigationPath.isEmpty {
             dismissPresentedView = true
@@ -171,31 +165,5 @@ public extension View {
 
     func router(_ router: Router) -> some View {
         modifier(RouterViewModifier(router: router))
-    }
-}
-
-private extension URL {
-
-    var pathString: String {
-        if let first = pathComponents.first, first == "/" {
-            return pathComponents.dropFirst().joined(separator: "/")
-        }
-        return pathComponents.joined(separator: "/")
-    }
-
-    var queryParameters: [String: String?] {
-        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false) else { return [:] }
-        return components.queryParameters
-    }
-
-    var compactQueryParameters: [String: String] {
-        queryParameters.compactMapValues({ $0 })
-    }
-}
-
-private extension URLComponents {
-
-    var queryParameters: [String: String?] {
-        (queryItems ?? []).reduce(into: [String: String?](), { $0[$1.name] = $1.value })
     }
 }

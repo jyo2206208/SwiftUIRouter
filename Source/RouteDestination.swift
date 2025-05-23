@@ -1,8 +1,8 @@
 //
 //  RouteDestination.swift
-//  MyFoundation
+//  SwiftUIRouter
 //
-//  Created by 杜晔 on 2025/5/12.
+//  Created by Ethan.Du on 2025/5/12.
 //
 
 import Foundation
