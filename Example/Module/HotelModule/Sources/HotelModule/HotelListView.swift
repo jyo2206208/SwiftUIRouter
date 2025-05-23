@@ -9,11 +9,11 @@ import SwiftUI
 import MyService
 import SwiftUIRouter
 
-public struct HotelListView: View {
-    
+struct HotelListView: View {
+
     @Environment(\.router) var router
     
-    public var body: some View {
+    var body: some View {
         ForEach(MyService.hotels) { hotel in
             HStack {
                 Color.red.frame(width: 50, height: 50)

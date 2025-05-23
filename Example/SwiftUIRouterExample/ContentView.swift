@@ -8,7 +8,6 @@
 import SwiftUI
 import MyService
 import SwiftUIRouter
-import HomeModule
 
 struct ContentView: View {
 
@@ -38,7 +37,8 @@ struct ContentView: View {
         }
         TabView(selection: $selectedTab) {
             ForEach(routerTuples, id: \.0) { tab, router in
-                tab
+                Router
+                    .rootView(for: tab.rawValue)
                     .router(router)
                     .tabItem { Label(tab.title, systemImage: tab.image) }
                     .tag(tab.rawValue)

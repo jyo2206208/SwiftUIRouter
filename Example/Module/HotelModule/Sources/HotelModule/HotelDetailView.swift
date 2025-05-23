@@ -8,11 +8,11 @@
 import SwiftUI
 import MyService
 
-public struct HotelDetailView: View {
-    
+struct HotelDetailView: View {
+
     private var hotelID: String
     
-    public var body: some View {
+    var body: some View {
         if let hotel = hotels.filter { $0.id == Int(hotelID) }.first {
             VStack(spacing: 20) {
                 Text("HotelID = \(hotel.id)").font(.headline)
@@ -24,7 +24,7 @@ public struct HotelDetailView: View {
         }
     }
     
-    public init(hotelID: String) {
+    init(hotelID: String) {
         self.hotelID = hotelID
     }
 }

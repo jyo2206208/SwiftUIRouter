@@ -18,8 +18,11 @@ import SwiftUIRouter
 struct ExampleApp: App {
 
     init() {
+        _ = HomeModule()
         _ = BookModule()
         _ = HotelModule()
+        _ = TripModule()
+        _ = MeModule()
     }
 
     var body: some Scene {
@@ -56,18 +59,6 @@ extension RootTabs {
         case .book: "tray.2"
         case .trip: "bag"
         case .me: "person"
-        }
-    }
-}
-
-extension RootTabs: View {
-
-    public var body: some View {
-        switch self {
-        case .home: HomeView()
-        case .book: BookView()
-        case .trip: TripView()
-        case .me: MeView()
         }
     }
 }

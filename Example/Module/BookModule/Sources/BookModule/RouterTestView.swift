@@ -8,11 +8,11 @@
 import SwiftUI
 import SwiftUIRouter
 
-public struct RouterTestView: View {
-    
+struct RouterTestView: View {
+
     @Environment(\.router) var router
     
-    public var body: some View {
+    var body: some View {
         Button("push a new view") {
             router.navigate(to: "test", type: .push)
         }
@@ -44,7 +44,6 @@ public struct RouterTestView: View {
             router.dismissAllModal()
         }
     }
-    public init() {}
 }
 
 #Preview {

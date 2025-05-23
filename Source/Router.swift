@@ -49,8 +49,8 @@ extension Router {
         }
     }
 
-    private static func canNavigate(for destination: RouteDestination) -> Bool {
-        Router.routeHandlers[destination.path] != nil
+    private static func canNavigate(for destination: RouteDestination) -> (any RouteHandler.Type)? {
+        Router.routeHandlers[destination.path]
     }
 }
 
@@ -63,11 +63,19 @@ public extension Router {
         }
     }
 
+    static func rootView(for tab: Int) -> AnyView {
+        guard let view = routeHandlers.values.first (where: { $0.tabIfRoot == tab })?.view(for: .root) else {
+            fatalError("Tab \(tab) is not registed as root!")
+        }
+        return AnyView(view)
+    }
+
     func navigate(to path: String,
                   type: NavigationType = .push,
                   param: Any? = nil) {
         let destination = RouteDestination(path: path, param: param)
-        guard Self.canNavigate(for: destination) else { return }
+        guard let handler = Self.canNavigate(for: destination) else { return }
+        if let tab = handler.tabIfRoot { switchTab(to: tab);return }
         switch type {
         case .push:
             navigationPath.append(destination)

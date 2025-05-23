@@ -14,6 +14,13 @@ public protocol RouteHandler: View {
     static var path: String { get }
 
     static func view(for destination: RouteDestination) -> Self?
+
+    static var tabIfRoot: Int? { get }
+}
+
+public extension RouteHandler {
+
+    static var tabIfRoot: Int? { nil }
 }
 
 public struct RouteDestination {
@@ -39,4 +46,9 @@ extension RouteDestination: Hashable, Identifiable {
     public static func == (lhs: RouteDestination, rhs: RouteDestination) -> Bool {
         lhs.path == rhs.path
     }
+}
+
+extension RouteDestination {
+
+    @MainActor static var root = RouteDestination(path: "")
 }
