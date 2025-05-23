@@ -12,7 +12,7 @@ let package = Package(
             targets: ["MyService"]),
     ],
      dependencies: [
-         .package(path: "../../..")
+         .package(path: "../../../SwiftUIRouter")
      ],
     targets: [
         .target(
