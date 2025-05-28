@@ -24,7 +24,7 @@ public enum NavigationType {
 
 public final class Router: ObservableObject {
 
-    private let parent: Router?
+    private weak var parent: Router?
     private let owner: Owner
 
     init(parent: Router? = nil, owner: Owner) {
