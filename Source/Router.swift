@@ -35,7 +35,6 @@ public final class Router: ObservableObject {
     @Published fileprivate var navigationPath = NavigationPath()
     @Published fileprivate var presentedSheetDestination: RouteDestination?
     @Published fileprivate var presentedFullScreenCoverDestination: RouteDestination?
-    @Published fileprivate var dismissPresentedView: Bool?
 }
 
 @MainActor
@@ -99,7 +98,8 @@ public extension Router {
 
     func dismiss() {
         if navigationPath.isEmpty {
-            dismissPresentedView = true
+            parent?.presentedSheetDestination = nil
+            parent?.presentedFullScreenCoverDestination = nil
         } else {
             navigationPath.removeLast()
         }
@@ -151,22 +151,14 @@ private struct RouterViewModifier: ViewModifier {
 
 private struct ModalPresenter: ViewModifier {
     @ObservedObject fileprivate var parent: Router
-    @Environment(\.dismiss) var dismiss
 
     func body(content: Content) -> some View {
         content
-            .sheet(item: $parent.presentedSheetDestination, onDismiss: {
-                parent.presentedSheetDestination = nil
-            }, content: { destination in
-                Router.view(for: destination)?.router(.init(parent: parent, owner: .presenter))
-            })
-            .fullScreenCover(item: $parent.presentedFullScreenCoverDestination, onDismiss: {
-                parent.presentedFullScreenCoverDestination = nil
-            }, content: { destination in
-                Router.view(for: destination)?.router(.init(parent: parent, owner: .presenter))
-            })
-            .onChange(of: parent.dismissPresentedView) {
-                dismiss()
+            .sheet(item: $parent.presentedSheetDestination) {
+                Router.view(for: $0)?.router(.init(parent: parent, owner: .presenter))
+            }
+            .fullScreenCover(item: $parent.presentedFullScreenCoverDestination) {
+                Router.view(for: $0)?.router(.init(parent: parent, owner: .presenter))
             }
     }
 }
